@@ -1,6 +1,9 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../app/appState.dart';
+import '../widgets/syntaxHighlighter.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -36,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('Qwen/QwQ-32B'),
                     ),
                     Divider(),
-
                     SimpleDialogOption(
                       onPressed:
                           () => Navigator.pop(
@@ -46,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('internlm/internlm2_5-7b-chat'),
                     ),
                     Divider(),
-
                     SimpleDialogOption(
                       onPressed:
                           () =>
@@ -54,7 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('deepseek-ai/DeepSeek-V3'),
                     ),
                     Divider(),
-
                     SimpleDialogOption(
                       onPressed:
                           () => Navigator.pop(context, 'THUDM/GLM-4-32B-0414'),
@@ -65,10 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             );
             if (model != null) {
-              appState.response = 'Model changed!';
-              appState.setModel(model);
-            } else {
-              DoNothingAction();
+              await appState.setModel(model);
             }
           },
           child: Text("ChatBot"),
@@ -87,7 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () => Navigator.pop(context, true),
                       ),
                       Divider(),
-
                       SimpleDialogOption(
                         child: Text('Cancel'),
                         onPressed: () => Navigator.pop(context, false),
@@ -96,14 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               );
-
-              result
-                  ? {
-                    appState.clear(),
-                    appState.response = 'No message yet...',
-                    setState(() {}),
-                  }
-                  : DoNothingAction();
+              if (result == true) {
+                await appState.clear();
+              }
             },
             icon: Icon(Icons.clear),
           ),
@@ -112,14 +103,52 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: [
           Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Text(appState.response),
-                ),
-              ),
+            child: ListView.builder(
+              padding: EdgeInsets.all(15),
+              itemCount: appState.history.length,
+              itemBuilder: (context, index) {
+                final msg = appState.history[index];
+                final isUser = msg['role'] == 'user';
+                return Align(
+                  alignment:
+                      isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.8,
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: isUser ? Colors.blue : Colors.grey,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: // Text(msg['content'] ?? ''),
+                          isUser
+                              ? Text(msg['content'] ?? '')
+                              : Markdown(
+                                data: msg['content'] ?? '',
+                                shrinkWrap: true,
+                                syntaxHighlighter: MySyntaxHighlighter(),
+                                selectable: true,
+                                styleSheet: MarkdownStyleSheet(
+                                  codeblockDecoration: BoxDecoration(
+                                    color: Color(0xFF282C34),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                                onTapLink: (text, href, title) async {
+                                  if (href == null) return;
+                                  var url = Uri.parse(href);
+                                  if (await canLaunchUrl(url)) {
+                                    await launchUrl(url);
+                                  }
+                                },
+                              ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           Padding(
@@ -138,9 +167,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () async {
-                    appState.response = 'Thinking...';
                     var text = _controller.text;
-                    _controller.text = '';
+                    if (text.trim().isEmpty) {
+                      return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Tips'),
+                            content: Text("Message couldn't be empty."),
+                          );
+                        },
+                      );
+                    }
+                    _controller.clear();
+                    appState.response = 'Thinking...';
                     await appState.getResponse(text);
                   },
                 ),

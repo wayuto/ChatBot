@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyAppState extends ChangeNotifier {
-  var response = 'No message yet...';
+  static const APIKey = 'sk-xyhiljqssfqqhdaqzjggnekvfqipsczmnwmbzifmueasbdrm';
+  static const url = 'https://api.siliconflow.cn/v1/chat/completions';
+  String response = 'No message yet...';
   var history = <Map<String, String>>[];
-  String model = 'internlm/internlm2_5-7b-chat';
+  String? model;
 
   late SharedPreferences _prefs;
   bool _isInitialized = false;
@@ -15,16 +17,24 @@ class MyAppState extends ChangeNotifier {
     init();
   }
 
-  void setModel(var newModel) {
+  Future<void> setModel(var newModel) async {
     model = newModel;
-    clear();
+    _prefs.setString('model', newModel);
+    await clear();
+  }
+
+  Future<void> loadModel() async {
+    if (!_isInitialized) return;
+    var newModel = _prefs.getString('model');
+    model = newModel ?? 'deepseek-ai/DeepSeek-V3';
     notifyListeners();
   }
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
-    await loadHistory();
     _isInitialized = true;
+    await loadModel();
+    await loadHistory();
   }
 
   Future<void> saveHistory() async {
@@ -46,34 +56,27 @@ class MyAppState extends ChangeNotifier {
       try {
         final List<dynamic> decoded = jsonDecode(historyJson);
         history = decoded.map((e) => Map<String, String>.from(e)).toList();
-        notifyListeners();
       } catch (e) {
         throw ('Error loading history: $e');
       }
     }
+    notifyListeners();
   }
 
   Future<void> clear() async {
     history.clear();
     await _prefs.remove('history');
+    response = 'No message yet...';
     notifyListeners();
   }
 
   Future<void> getResponse(String text) async {
     try {
-      if (text.trim().isEmpty) {
-        response = "Message couldn't be empty...";
-        notifyListeners();
-        return;
-      }
-
       await addHistory({'role': 'user', 'content': text});
-
       final content = await post(
-        Uri.parse("https://api.siliconflow.cn/v1/chat/completions"),
+        Uri.parse(url),
         headers: {
-          'Authorization':
-              'Bearer sk-xyhiljqssfqqhdaqzjggnekvfqipsczmnwmbzifmueasbdrm',
+          'Authorization': 'Bearer $APIKey',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
@@ -93,7 +96,6 @@ class MyAppState extends ChangeNotifier {
         await addHistory({'role': 'assistant', 'content': response});
       } else {
         response = "Error: ${content.statusCode}";
-        await addHistory({'role': 'assistant', 'content': response});
       }
       notifyListeners();
     } catch (e) {
