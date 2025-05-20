@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyAppState extends ChangeNotifier {
   static const APIKey = 'sk-xyhiljqssfqqhdaqzjggnekvfqipsczmnwmbzifmueasbdrm';
   static const url = 'https://api.siliconflow.cn/v1/chat/completions';
-  String response = 'No message yet...';
+  String response = '';
   var history = <Map<String, String>>[];
   String? model;
 
@@ -66,7 +66,6 @@ class MyAppState extends ChangeNotifier {
   Future<void> clear() async {
     history.clear();
     await _prefs.remove('history');
-    response = 'No message yet...';
     notifyListeners();
   }
 
@@ -82,7 +81,10 @@ class MyAppState extends ChangeNotifier {
         body: jsonEncode({
           'model': model,
           'messages': [
-            {'role': 'system', 'content': 'You are a helpful assistant.'},
+            {
+              'role': 'system',
+              'content': '你叫WBot, 你的开发者是万宇桐(Wan Yutong), 你的语言模型是$model',
+            },
             ...history.map(
               (msg) => {'role': msg['role'], 'content': msg['content']},
             ),

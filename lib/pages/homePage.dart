@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
               await appState.setModel(model);
             }
           },
-          child: Text("ChatBot"),
+          child: Text("Current model: ${appState.model}"),
         ),
         actions: [
           IconButton(
@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       margin: EdgeInsets.symmetric(vertical: 4),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: isUser ? Colors.blue : Colors.grey,
+                        color: isUser ? Colors.blue : null,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: // Text(msg['content'] ?? ''),
@@ -180,7 +180,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                     }
                     _controller.clear();
-                    appState.response = 'Thinking...';
                     await appState.getResponse(text);
                   },
                 ),
