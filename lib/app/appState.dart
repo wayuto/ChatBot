@@ -9,6 +9,7 @@ class MyAppState extends ChangeNotifier {
   String response = '';
   var history = <Map<String, String>>[];
   String? model;
+  String? appBar;
 
   late SharedPreferences _prefs;
   bool _isInitialized = false;
@@ -27,6 +28,7 @@ class MyAppState extends ChangeNotifier {
     if (!_isInitialized) return;
     var newModel = _prefs.getString('model');
     model = newModel ?? 'deepseek-ai/DeepSeek-V3';
+    appBar = "Model: $model";
     notifyListeners();
   }
 

@@ -11,9 +11,10 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'ChatBot',
+        title: 'WBot',
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
         home: MyHomePage(),
       ),
     );

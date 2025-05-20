@@ -14,11 +14,35 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  void scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   @override
@@ -66,9 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
             );
             if (model != null) {
               await appState.setModel(model);
+              appState.appBar = "Model: ${appState.model}";
             }
           },
-          child: Text("Current model: ${appState.model}"),
+          child: Text("${appState.appBar}"),
         ),
         actions: [
           IconButton(
@@ -105,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(15),
+              controller: _scrollController,
               itemCount: appState.history.length,
               itemBuilder: (context, index) {
                 final msg = appState.history[index];
@@ -114,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.8,
+                      maxWidth: MediaQuery.of(context).size.width,
                     ),
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 4),
@@ -123,12 +149,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: isUser ? Colors.blue : null,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: // Text(msg['content'] ?? ''),
+                      child:
                           isUser
                               ? Text(msg['content'] ?? '')
                               : Markdown(
                                 data: msg['content'] ?? '',
                                 shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
                                 syntaxHighlighter: MySyntaxHighlighter(),
                                 selectable: true,
                                 styleSheet: MarkdownStyleSheet(
@@ -180,7 +207,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                     }
                     _controller.clear();
+                    appState.appBar = "Thinking...";
+                    scrollToBottom();
                     await appState.getResponse(text);
+                    appState.appBar = "Model: ${appState.model}";
+                    scrollToBottom();
                   },
                 ),
               ],
