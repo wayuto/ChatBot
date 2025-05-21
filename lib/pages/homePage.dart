@@ -4,6 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../app/appState.dart';
 import '../widgets/syntaxHighlighter.dart';
+import '../pages/settingsPage.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -14,7 +15,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _controller = TextEditingController();
-  final TextEditingController _promptContronller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   void scrollToBottom() {
@@ -47,112 +47,16 @@ class _MyHomePageState extends State<MyHomePage> {
     var appState = context.watch<MyAppState>();
     return Scaffold(
       appBar: AppBar(
-        title: TextButton(
-          onPressed: () async {
-            var model = await showDialog<String>(
-              context: context,
-              builder: (context) {
-                return SimpleDialog(
-                  title: Text('Choose a model:'),
-                  children: [
-                    SimpleDialogOption(
-                      onPressed: () => Navigator.pop(context, 'Qwen/QwQ-32B'),
-                      child: Text('Qwen/QwQ-32B'),
-                    ),
-                    Divider(),
-                    SimpleDialogOption(
-                      onPressed:
-                          () => Navigator.pop(
-                            context,
-                            'internlm/internlm2_5-7b-chat',
-                          ),
-                      child: Text('internlm/internlm2_5-7b-chat'),
-                    ),
-                    Divider(),
-                    SimpleDialogOption(
-                      onPressed:
-                          () =>
-                              Navigator.pop(context, 'deepseek-ai/DeepSeek-V3'),
-                      child: Text('deepseek-ai/DeepSeek-V3'),
-                    ),
-                    Divider(),
-                    SimpleDialogOption(
-                      onPressed:
-                          () => Navigator.pop(context, 'THUDM/GLM-4-32B-0414'),
-                      child: Text('THUDM/GLM-4-32B-0414'),
-                    ),
-                  ],
-                );
-              },
-            );
-            if (model != null) {
-              await appState.setModel(model);
-              appState.appBar = "Model: ${appState.model}";
-            }
-          },
-          child: Text("${appState.appBar}"),
-        ),
+        title: Text("${appState.appBar}"),
         actions: [
           IconButton(
             onPressed: () async {
-              return showDialog(
-                context: context,
-                builder: (content) {
-                  return AlertDialog(
-                    title: Text('Set Prompt'),
-                    content: TextField(
-                      controller: _promptContronller,
-                      decoration: InputDecoration(hintText: 'prompt'),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      TextButton(
-                        child: Text('OK'),
-                        onPressed: () async {
-                          if (_promptContronller.text.isNotEmpty) {
-                            await appState.setPrompt(_promptContronller.text);
-                            Navigator.pop(context);
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MySettingsPage()),
               );
             },
             icon: Icon(Icons.settings),
-          ),
-          IconButton(
-            onPressed: () async {
-              bool result = await showDialog(
-                context: context,
-                builder: (context) {
-                  return SimpleDialog(
-                    title: Text('Clean all history?'),
-                    children: [
-                      SimpleDialogOption(
-                        child: Text('Yes'),
-                        onPressed: () => Navigator.pop(context, true),
-                      ),
-                      Divider(),
-                      SimpleDialogOption(
-                        child: Text('Cancel'),
-                        onPressed: () => Navigator.pop(context, false),
-                      ),
-                    ],
-                  );
-                },
-              );
-              if (result == true) {
-                await appState.clear();
-              }
-            },
-            icon: Icon(Icons.clear),
           ),
         ],
       ),
