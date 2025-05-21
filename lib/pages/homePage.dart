@@ -14,6 +14,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _controller = TextEditingController();
+  final TextEditingController _promptContronller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   void scrollToBottom() {
@@ -38,11 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-      }
-    });
+    scrollToBottom();
   }
 
   @override
@@ -96,6 +93,40 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Text("${appState.appBar}"),
         ),
         actions: [
+          IconButton(
+            onPressed: () async {
+              return showDialog(
+                context: context,
+                builder: (content) {
+                  return AlertDialog(
+                    title: Text('Set Prompt'),
+                    content: TextField(
+                      controller: _promptContronller,
+                      decoration: InputDecoration(hintText: 'prompt'),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      TextButton(
+                        child: Text('OK'),
+                        onPressed: () async {
+                          if (_promptContronller.text.isNotEmpty) {
+                            await appState.setPrompt(_promptContronller.text);
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.settings),
+          ),
           IconButton(
             onPressed: () async {
               bool result = await showDialog(
@@ -202,6 +233,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           return AlertDialog(
                             title: Text('Tips'),
                             content: Text("Message couldn't be empty."),
+                            actions: [
+                              TextButton(
+                                child: Text('Got it.'),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ],
                           );
                         },
                       );

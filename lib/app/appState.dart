@@ -10,12 +10,26 @@ class MyAppState extends ChangeNotifier {
   var history = <Map<String, String>>[];
   String? model;
   String? appBar;
+  String? prompt;
 
   late SharedPreferences _prefs;
   bool _isInitialized = false;
 
   MyAppState() {
     init();
+  }
+
+  Future<void> setPrompt(String newPrompt) async {
+    prompt = newPrompt;
+    _prefs.setString('prompt', newPrompt);
+    await clear();
+  }
+
+  Future<void> loadPrompt() async {
+    if (!_isInitialized) return;
+    var newPrompt = _prefs.getString('prompt');
+    prompt = newPrompt ?? '你叫WBot, 你的开发者是万宇桐(Wan Yutong), 你的语言模型是$model';
+    notifyListeners();
   }
 
   Future<void> setModel(var newModel) async {
@@ -36,6 +50,7 @@ class MyAppState extends ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     _isInitialized = true;
     await loadModel();
+    await loadPrompt();
     await loadHistory();
   }
 
@@ -83,10 +98,7 @@ class MyAppState extends ChangeNotifier {
         body: jsonEncode({
           'model': model,
           'messages': [
-            {
-              'role': 'system',
-              'content': '你叫WBot, 你的开发者是万宇桐(Wan Yutong), 你的语言模型是$model',
-            },
+            {'role': 'system', 'content': 'Strictly abide by these: {$prompt}'},
             ...history.map(
               (msg) => {'role': msg['role'], 'content': msg['content']},
             ),
