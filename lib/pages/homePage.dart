@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -47,7 +48,13 @@ class _MyHomePageState extends State<MyHomePage> {
     var appState = context.watch<MyAppState>();
     return Scaffold(
       appBar: AppBar(
-        title: Text("${appState.appBar}"),
+        title: AutoSizeText(
+          '${appState.appBar}',
+          maxLines: 1,
+          minFontSize: 10,
+          style: TextStyle(fontWeight: FontWeight.bold),
+          overflow: TextOverflow.ellipsis,
+        ),
         actions: [
           IconButton(
             onPressed: () async {
@@ -127,8 +134,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon:
+                      !appState.isThinking
+                          ? Icon(Icons.send)
+                          : Icon(Icons.circle),
                   onPressed: () async {
+                    if (appState.isThinking) {
+                      return showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Tips'),
+                            content: Text('Model is thinking...'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                     var text = _controller.text;
                     if (text.trim().isEmpty) {
                       return showDialog(

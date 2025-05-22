@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../app/appState.dart';
+import '../app/app.dart';
 
 class MySettingsPage extends StatefulWidget {
   const MySettingsPage({super.key});
@@ -103,41 +105,103 @@ class _MySettingsPageState extends State<MySettingsPage> {
           ),
           ListTile(
             onTap: () async {
-              bool result = await showDialog(
+              return await showDialog(
                 context: context,
                 builder: (context) {
+                  var context0 = context;
                   return SimpleDialog(
-                    title: Text('Clean all history?'),
+                    title: Text('Clear'),
                     children: [
                       SimpleDialogOption(
-                        child: Text('Yes'),
-                        onPressed: () => Navigator.pop(context, true),
+                        onPressed: () {
+                          appState.clearHistory();
+                          Navigator.of(context0).pop();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('History'),
                       ),
                       Divider(),
                       SimpleDialogOption(
-                        child: Text('Cancel'),
-                        onPressed: () => Navigator.pop(context, false),
+                        onPressed: () {
+                          appState.clearPrompt();
+                          Navigator.of(context0).pop();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Prompt'),
                       ),
                     ],
                   );
                 },
               );
-              if (result == true) {
-                await appState.clear();
-              }
             },
             title: Text('Clear'),
           ),
           ListTile(
             onTap: () async {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Version: v1.2.1'),
-                  duration: Duration(seconds: 3),
-                ),
+              final themeNotifier = context.read<ThemeNotifier>();
+              final currentMode = themeNotifier.themeMode;
+
+              await showDialog(
+                context: context,
+                builder:
+                    (context) => SimpleDialog(
+                      title: const Text('Choose a theme'),
+                      children: [
+                        RadioListTile<ThemeMode>(
+                          title: const Text('Light'),
+                          value: ThemeMode.light,
+                          groupValue: currentMode,
+                          onChanged: (_) {
+                            themeNotifier.toggleTheme('light');
+                            Navigator.pop(context);
+                          },
+                        ),
+                        const Divider(),
+                        RadioListTile<ThemeMode>(
+                          title: const Text('Dark'),
+                          value: ThemeMode.dark,
+                          groupValue: currentMode,
+                          onChanged: (_) {
+                            themeNotifier.toggleTheme('dark');
+                            Navigator.pop(context);
+                          },
+                        ),
+                        const Divider(),
+                        RadioListTile<ThemeMode>(
+                          title: const Text('System'),
+                          value: ThemeMode.system,
+                          groupValue: currentMode,
+                          onChanged: (_) {
+                            themeNotifier.toggleTheme('system');
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
               );
             },
-            title: Text('Version: v1.2.1'),
+            title: const Text('Theme'),
+          ),
+          ListTile(
+            onTap: () async {
+              try {
+                final pkgInfo = await PackageInfo.fromPlatform();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Version: ${pkgInfo.version}'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: $e'),
+                    duration: Duration(seconds: 5),
+                  ),
+                );
+              }
+            },
+            title: Text('Version'),
           ),
         ],
       ),

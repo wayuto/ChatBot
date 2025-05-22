@@ -8,15 +8,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = context.watch<ThemeNotifier>();
+
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
         title: 'WBot',
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.system,
+        themeMode: themeNotifier.themeMode,
         home: MyHomePage(),
       ),
     );
+  }
+}
+
+class ThemeNotifier extends ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode get themeMode => _themeMode;
+
+  void toggleTheme(String theme) {
+    _themeMode = switch (theme) {
+      'light' => ThemeMode.light,
+      'dark' => ThemeMode.dark,
+      _ => ThemeMode.system,
+    };
+
+    notifyListeners();
   }
 }

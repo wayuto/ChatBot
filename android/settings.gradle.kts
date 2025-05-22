@@ -10,7 +10,6 @@ pluginManagement {
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
-        maven { url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven") }
         google()
         mavenCentral()
     }
