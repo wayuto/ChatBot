@@ -3,6 +3,8 @@
 A cross-platform AI chatbot app built with Flutter.  
 Supports Markdown rendering, code highlighting, model selection, persistent chat history, and light/dark/system themes.
 
+Try it in [GitHub Pages](https://wayuto.github.io)
+
 ---
 
 ## Features

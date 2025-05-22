@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wbot/app/appState.dart';
-import 'package:wbot/widgets/syntaxHighlighter.dart';
-import 'package:wbot/pages/settingsPage.dart';
+import 'package:WBot/app/appState.dart';
+import 'package:WBot/widgets/syntaxHighlighter.dart';
+import 'package:WBot/pages/settingsPage.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

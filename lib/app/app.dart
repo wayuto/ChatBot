@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wbot/app/appState.dart';
-import 'package:wbot/pages/homePage.dart';
+import 'package:WBot/app/appState.dart';
+import 'package:WBot/pages/homePage.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
