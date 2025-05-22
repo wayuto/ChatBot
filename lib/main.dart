@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'app/app.dart';
+import 'package:wbot/app/app.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final themeNotifier = ThemeNotifier();
+  await themeNotifier.loadTheme();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
-      child: const MyApp(),
-    ),
+    ChangeNotifierProvider.value(value: themeNotifier, child: const MyApp()),
   );
 }

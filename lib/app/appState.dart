@@ -29,6 +29,7 @@ class MyAppState extends ChangeNotifier {
 
   Future<void> setModel(String newModel) async {
     model = newModel;
+    loadPrompt();
     _prefs.setString('model', newModel);
     await clearHistory();
   }

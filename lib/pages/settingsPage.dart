@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../app/appState.dart';
-import '../app/app.dart';
+import 'package:wbot/app/appState.dart';
+import 'package:wbot/app/app.dart';
 
 class MySettingsPage extends StatefulWidget {
   const MySettingsPage({super.key});
@@ -63,40 +63,49 @@ class _MySettingsPageState extends State<MySettingsPage> {
                   return SimpleDialog(
                     title: Text('Choose a model:'),
                     children: [
-                      SimpleDialogOption(
-                        onPressed: () => Navigator.pop(context, 'Qwen/QwQ-32B'),
-                        child: Text('Qwen/QwQ-32B'),
-                      ),
-                      Divider(),
-                      SimpleDialogOption(
-                        onPressed:
-                            () => Navigator.pop(
-                              context,
-                              'internlm/internlm2_5-7b-chat',
-                            ),
-                        child: Text('internlm/internlm2_5-7b-chat'),
-                      ),
-                      Divider(),
-                      SimpleDialogOption(
-                        onPressed:
-                            () => Navigator.pop(
+                      RadioListTile(
+                        title: Text('deepseek-ai/DeepSeek-V3'),
+                        value: 'deepseek-ai/DeepSeek-V3',
+                        groupValue: appState.model,
+                        onChanged:
+                            (_) => Navigator.pop(
                               context,
                               'deepseek-ai/DeepSeek-V3',
                             ),
-                        child: Text('deepseek-ai/DeepSeek-V3'),
                       ),
                       Divider(),
-                      SimpleDialogOption(
-                        onPressed:
-                            () =>
+                      RadioListTile(
+                        title: Text('Qwen/QwQ-32B'),
+                        value: 'Qwen/QwQ-32B',
+                        groupValue: appState.model,
+                        onChanged:
+                            (_) => Navigator.pop(context, 'Qwen/QwQ-32B'),
+                      ),
+                      Divider(),
+                      RadioListTile(
+                        title: Text('internlm/internlm2_5-7b-chat'),
+                        value: 'internlm/internlm2_5-7b-chat',
+                        groupValue: appState.model,
+                        onChanged:
+                            (_) => Navigator.pop(
+                              context,
+                              'internlm/internlm2_5-7b-chat',
+                            ),
+                      ),
+                      Divider(),
+                      RadioListTile(
+                        title: Text('THUDM/GLM-4-32B-0414'),
+                        value: 'THUDM/GLM-4-32B-0414',
+                        groupValue: appState.model,
+                        onChanged:
+                            (_) =>
                                 Navigator.pop(context, 'THUDM/GLM-4-32B-0414'),
-                        child: Text('THUDM/GLM-4-32B-0414'),
                       ),
                     ],
                   );
                 },
               );
-              if (model != null) {
+              if (model != null && model != appState.model) {
                 await appState.setModel(model);
                 appState.appBar = "Model: ${appState.model}";
               }
@@ -152,7 +161,11 @@ class _MySettingsPageState extends State<MySettingsPage> {
                           value: ThemeMode.light,
                           groupValue: currentMode,
                           onChanged: (_) {
-                            themeNotifier.toggleTheme('light');
+                            // themeNotifier.toggleTheme('light');
+                            Provider.of<ThemeNotifier>(
+                              context,
+                              listen: false,
+                            ).toggleTheme('light');
                             Navigator.pop(context);
                           },
                         ),
@@ -162,7 +175,11 @@ class _MySettingsPageState extends State<MySettingsPage> {
                           value: ThemeMode.dark,
                           groupValue: currentMode,
                           onChanged: (_) {
-                            themeNotifier.toggleTheme('dark');
+                            // themeNotifier.toggleTheme('dark');
+                            Provider.of<ThemeNotifier>(
+                              context,
+                              listen: false,
+                            ).toggleTheme('dark');
                             Navigator.pop(context);
                           },
                         ),
@@ -172,7 +189,11 @@ class _MySettingsPageState extends State<MySettingsPage> {
                           value: ThemeMode.system,
                           groupValue: currentMode,
                           onChanged: (_) {
-                            themeNotifier.toggleTheme('system');
+                            // themeNotifier.toggleTheme('system');
+                            Provider.of<ThemeNotifier>(
+                              context,
+                              listen: false,
+                            ).toggleTheme('system');
                             Navigator.pop(context);
                           },
                         ),
