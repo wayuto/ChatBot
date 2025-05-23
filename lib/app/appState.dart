@@ -45,7 +45,7 @@ class MyAppState extends ChangeNotifier {
     if (!_isInitialized) return;
     final newModel = _prefs.getString('model');
     model = newModel ?? 'deepseek-ai/DeepSeek-V3';
-    appBar = "Model: $model";
+    appBar = model;
     notifyListeners();
   }
 

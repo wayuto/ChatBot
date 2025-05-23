@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:WBot/app/app.dart';
+import 'package:WBot/app/appState.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final themeNotifier = ThemeNotifier();
-  await themeNotifier.loadTheme();
+  final localeNotifier = LocaleNotifier();
+
+  await Future.wait([themeNotifier.loadTheme(), localeNotifier.loadLocale()]);
+
   runApp(
-    ChangeNotifierProvider.value(value: themeNotifier, child: const MyApp()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: themeNotifier),
+        ChangeNotifierProvider.value(value: localeNotifier),
+        ChangeNotifierProvider(create: (context) => MyAppState()),
+      ],
+      child: const MyApp(),
+    ),
   );
 }

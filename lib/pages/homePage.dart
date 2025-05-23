@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:WBot/app/appState.dart';
 import 'package:WBot/widgets/syntaxHighlighter.dart';
 import 'package:WBot/pages/settingsPage.dart';
@@ -129,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     controller: _controller,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: "Send me messages",
+                      hintText: AppLocalizations.of(context)!.msgHint,
                     ),
                   ),
                 ),
@@ -144,12 +145,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('Tips'),
-                            content: Text('Model is thinking...'),
+                            title: Text(AppLocalizations.of(context)!.tips),
+                            content: Text(
+                              AppLocalizations.of(context)!.modelIsThinking,
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: Text('OK'),
+                                child: Text(
+                                  AppLocalizations.of(context)!.gotIt,
+                                ),
                               ),
                             ],
                           );
@@ -162,11 +167,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text('Tips'),
-                            content: Text("Message couldn't be empty."),
+                            title: Text(AppLocalizations.of(context)!.tips),
+                            content: Text(
+                              AppLocalizations.of(context)!.couldntBeEmpty,
+                            ),
                             actions: [
                               TextButton(
-                                child: Text('Got it.'),
+                                child: Text(
+                                  AppLocalizations.of(context)!.gotIt,
+                                ),
                                 onPressed: () => Navigator.pop(context),
                               ),
                             ],
@@ -175,10 +184,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                     }
                     _controller.clear();
-                    appState.appBar = "Thinking...";
+                    appState.appBar = AppLocalizations.of(context)!.thinking;
                     scrollToBottom();
                     await appState.getResponse(text);
-                    appState.appBar = "Model: ${appState.model}";
+                    appState.appBar = AppLocalizations.of(
+                      context,
+                    )!.model('${appState.model}');
                     scrollToBottom();
                   },
                 ),
