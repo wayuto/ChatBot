@@ -2,12 +2,6 @@
     "@@locale": "en",
     "thinking": "Thinking..",
     "@thinking": {},
-    "model": "Model: {model}",
-    "@model": {
-        "placeholders": {
-            "model": {}
-        }
-    },
     "gotIt": "OK",
     "@gotIt": {},
     "cancel": "Cancel",

@@ -3,11 +3,6 @@
     "thinking": "En réflexion...",
     "@thinking": {},
     "model": "Modèle : {model}",
-    "@model": {
-        "placeholders": {
-            "model": {}
-        }
-    },
     "gotIt": "OK",
     "@gotIt": {},
     "cancel": "Annuler",

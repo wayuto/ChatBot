@@ -187,9 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     appState.appBar = AppLocalizations.of(context)!.thinking;
                     scrollToBottom();
                     await appState.getResponse(text);
-                    appState.appBar = AppLocalizations.of(
-                      context,
-                    )!.model('${appState.model}');
+                    appState.appBar = appState.model;
                     scrollToBottom();
                   },
                 ),

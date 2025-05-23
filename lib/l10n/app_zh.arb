@@ -2,12 +2,6 @@
     "@@locale": "zh",
     "thinking": "思考中...",
     "@thinking": {},
-    "model": "模型：{model}",
-    "@model": {
-        "placeholders": {
-            "model": {}
-        }
-    },
     "gotIt": "好的",
     "@gotIt": {},
     "cancel": "取消",

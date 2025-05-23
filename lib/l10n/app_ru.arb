@@ -2,12 +2,6 @@
     "@@locale": "ru",
     "thinking": "Думаю...",
     "@thinking": {},
-    "model": "Модель: {model}",
-    "@model": {
-        "placeholders": {
-            "model": {}
-        }
-    },
     "gotIt": "Хорошо",
     "@gotIt": {},
     "cancel": "Отмена",

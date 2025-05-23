@@ -2,12 +2,6 @@
     "@@locale": "ja",
     "thinking": "考え中...",
     "@thinking": {},
-    "model": "モデル: {model}",
-    "@model": {
-        "placeholders": {
-            "model": {}
-        }
-    },
     "gotIt": "了解",
     "@gotIt": {},
     "cancel": "キャンセル",

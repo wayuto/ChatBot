@@ -2,12 +2,6 @@
     "@@locale": "ko",
     "thinking": "생각 중...",
     "@thinking": {},
-    "model": "모델: {model}",
-    "@model": {
-        "placeholders": {
-            "model": {}
-        }
-    },
     "gotIt": "확인",
     "@gotIt": {},
     "cancel": "취소",

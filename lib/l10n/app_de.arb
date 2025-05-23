@@ -2,12 +2,6 @@
     "@@locale": "de",
     "thinking": "Denke...",
     "@thinking": {},
-    "model": "Modell: {model}",
-    "@model": {
-        "placeholders": {
-            "model": {}
-        }
-    },
     "gotIt": "OK",
     "@gotIt": {},
     "cancel": "Abbrechen",
