@@ -1,9 +1,9 @@
+import 'package:WBot/l10n/app_localizations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:WBot/app/appState.dart';
 import 'package:WBot/widgets/syntaxHighlighter.dart';
 import 'package:WBot/pages/settingsPage.dart';

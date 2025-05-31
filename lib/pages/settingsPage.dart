@@ -1,8 +1,8 @@
 import 'dart:ui';
+import 'package:WBot/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:WBot/app/appState.dart';
 import 'package:WBot/app/app.dart';
 
