@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class MyAppState extends ChangeNotifier {
   static const APIKey = 'sk-xyhiljqssfqqhdaqzjggnekvfqipsczmnwmbzifmueasbdrm';
   static const url = 'https://api.siliconflow.cn/v1/chat/completions';

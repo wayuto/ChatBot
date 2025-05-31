@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:WBot/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:WBot/app/appState.dart';
-import 'package:WBot/app/app.dart';
+import 'package:wbot/app/appState.dart';
+import 'package:wbot/app/app.dart';
+import 'package:wbot/l10n/app_localizations.dart';
 
 class MySettingsPage extends StatefulWidget {
   const MySettingsPage({super.key});

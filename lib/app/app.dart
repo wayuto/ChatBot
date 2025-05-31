@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:WBot/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:WBot/app/appState.dart';
-import 'package:WBot/pages/homePage.dart';
+import 'package:wbot/app/appState.dart';
+import 'package:wbot/pages/homePage.dart';
+import 'package:wbot/l10n/app_localizations.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

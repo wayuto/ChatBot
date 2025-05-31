@@ -36,24 +36,24 @@ class MySyntaxHighlighter extends SyntaxHighlighter {
   }
 
   static const Map<String, Color> _defaultColorMap = {
-    'keyword': Color(0xFFC678DD), // 紫色
+    'keyword': Color(0xFFC678DD),
     'meta-keyword': Color(0xFFC678DD),
-    'string': Color(0xFF98C379), // 绿色
+    'string': Color(0xFF98C379),
     'meta-string': Color(0xFF98C379),
-    'number': Color(0xFFD19A66), // 橙色
-    'function': Color(0xFF61AFEF), // 蓝色
-    'comment': Color(0xFF5C6370), // 灰色
-    'title': Color(0xFFE5C07B), // 黄色
-    'params': Color(0xFFD19A66), // 橙色
-    'type': Color(0xFFE5C07B), // 黄色
-    'built_in': Color(0xFF56B6C2), // 青色
-    'literal': Color(0xFF56B6C2), // 青色
-    'attr': Color(0xFFD19A66), // 橙色
-    'variable': Color(0xFFE06C75), // 红色
+    'number': Color(0xFFD19A66),
+    'function': Color(0xFF61AFEF),
+    'comment': Color(0xFF5C6370),
+    'title': Color(0xFFE5C07B),
+    'params': Color(0xFFD19A66),
+    'type': Color(0xFFE5C07B),
+    'built_in': Color(0xFF56B6C2),
+    'literal': Color(0xFF56B6C2),
+    'attr': Color(0xFFD19A66),
+    'variable': Color(0xFFE06C75),
   };
 
   Color _getColor(String? className) {
-    if (className == null) return Color(0xFFABB2BF); // OneDark 默认前景色
+    if (className == null) return Color(0xFFABB2BF);
     return _defaultColorMap[className] ?? Color(0xFFABB2BF);
   }
 }

@@ -1,4 +1,4 @@
-name: WBot
+name: wbot
 description: "A ChatBot."
 
 # The following line prevents the package from being accidentally published to
@@ -45,6 +45,7 @@ dependencies:
   package_info_plus: ^8.3.0
   auto_size_text: ^3.0.0
   rename: ^3.1.0
+  shizuku_api: ^1.2.1
   intl: any
 
 flutter_launcher_icons:
